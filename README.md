@@ -1,2 +1,77 @@
-# focs_file
-Find Offset Containing Strings (of bytes) in a file
+# Find Offset Containing Strings (of bytes) in a VM
+
+You just have to specify a PID of quemu process, RAM size assiciated with a VM and a pattern to scan :)
+
+
+## HELP
+focs_file 0.1.0
+
+Kamil Stawiarski <kamil@ora-600.pl>
+
+Tool for finding patterns in memory
+
+
+USAGE:
+
+    focs_file [OPTIONS] --file-name <FILE_NAME> --pattern <PATTERN>
+
+
+OPTIONS:
+
+    -b, --buffer <BUFFER>          Size of a buffer to print [default: 256]
+
+    -f, --file-name <FILE_NAME>    PID of the process to scan
+
+    -h, --help                     Print help information
+
+    -p, --pattern <PATTERN>        Pattern in hex to search for
+
+    -P, --parallel <PARALLEL>      Parallel degree [default: 4]
+
+    -V, --version                  Print version information
+
+## Sample usage: 
+```bash
+[root@beta23c focs_file]# ./target/release/focs_file -P 4 -p 'cd 00 c0 03' -f /u01/app/oracle/fra/ORCL/archivelog/2022_12_23/o1_mf_1_94_ktbxmbn7_.arc
+Scanning memory from 0 to 22856448 in a separate thread
+Scanning memory from 68569344 to 91425792 in a separate thread
+Scanning memory from 45712896 to 68569344 in a separate thread
+Scanning memory from 22856448 to 45712896 in a separate thread
+Scanned: 77 %%
+Found 296 positions in a chunk
+Length: 256 (0x100) bytes
+0000:   cd 00 c0 03  66 0e bc 00  00 00 00 00  01 01 1d 78   ....f..........x
+0010:   04 00 00 00  00 00 00 00  06 00 14 00  10 00 1c 78   ...............x
+0020:   1d 78 01 00  01 80 02 00  00 00 00 00  c8 00 c0 03   .x..............
+0030:   00 00 00 00  66 0e bc 00  00 80 00 00  00 00 00 00   ....f...........
+0040:   00 00 00 00  2e 00 14 00  18 00 10 00  33 00 04 00   ............3...
+0050:   01 22 00 00  55 b6 02 00  5e 00 00 00  10 80 20 0f   ."..U...^..... .
+0060:   64 00 00 00  01 00 00 00  66 0e bc 00  01 00 00 00   d.......f.......
+0070:   0b df 89 2e  00 00 00 00  0d 15 01 00  13 00 01 00   ................
+0080:   ce 00 c0 03  66 0e bc 00  00 00 00 00  01 01 1d 78   ....f..........x
+0090:   04 00 00 00  00 00 00 00  06 00 14 00  10 00 1c 78   ...............x
+00a0:   1d 78 01 00  01 80 02 00  00 00 00 00  c8 00 c0 03   .x..............
+00b0:   00 00 00 00  66 0e bc 00  00 80 00 00  00 00 00 00   ....f...........
+00c0:   00 00 00 00  64 00 00 00  01 12 00 00  66 0e bc 00   ....d.......f...
+00d0:   01 00 00 00  0b df 89 2e  00 00 00 00  0d 15 01 00   ................
+00e0:   13 00 01 00  cf 00 c0 03  66 0e bc 00  00 00 00 00   ........f.......
+00f0:   01 01 1d 78  04 00 00 00  00 00 00 00  06 00 14 00   ...x............
+
+Length: 256 (0x100) bytes
+0000:   cd 00 c0 03  ca 00 c0 03  fa 12 03 01  01 00 00 00   ................
+0010:   00 00 00 36  0b 02 01 00  13 00 01 00  cd 00 c0 03   ...6............
+0020:   66 0e bc 00  00 00 00 00  02 00 1d 78  04 00 00 00   f..........x....
+0030:   00 00 00 00  1c 00 18 00  32 00 02 00  06 00 04 00   ........2.......
+0040:   05 00 0c 00  07 00 07 00  03 00 00 00  00 00 02 00   ................
+0050:   01 0d 00 00  00 00 00 00  08 00 0b 00  73 0c 00 00   ............s...
+0060:   a4 19 40 02  7c 02 64 00  cd 00 c0 03  ca 00 c0 03   ..@.|.d.........
+0070:   fa 12 02 01  01 00 00 00  2c 01 0b 00  00 00 00 00   ........,.......
+0080:   60 00 00 00  00 00 00 00  00 00 00 00  02 00 00 00   `...............
+0090:   3e 00 00 00  00 00 03 00  e8 52 40 02  c2 02 bc 00   >........R@.....
+00a0:   53 74 65 76  65 6e ff ff  4b 69 6e 67  53 4b 49 4e   Steven..KingSKIN
+00b0:   47 00 14 00  35 31 35 2e  31 32 33 2e  34 35 36 37   G...515.123.4567
+00c0:   78 67 06 11  01 01 01 00  41 44 5f 50  52 45 53 00   xg......AD_PRES.
+00d0:   c3 03 29 00  c1 5b 02 00  08 01 00 00  01 00 00 00   ..)..[..........
+00e0:   66 0e bc 00  03 00 00 00  0b df 89 2e  00 00 00 00   f...............
+00f0:   05 01 20 00  12 00 ff ff  a4 19 40 02  66 0e bc 00   .. .......@.f...
+```
