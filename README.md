@@ -1,4 +1,4 @@
-# Find Offset Containing Strings (of bytes) in a VM
+# Find Offset Containing Strings (of bytes) in a file
 
 You just have to specify a PID of quemu process, RAM size assiciated with a VM and a pattern to scan :)
 
