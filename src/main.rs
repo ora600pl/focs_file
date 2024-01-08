@@ -19,7 +19,7 @@ struct Args {
 
 	///Pattern in hex to search for
 	#[clap(short, long)]
-     pattern: String,
+     hex_pattern: String,
 
 	///Parallel degree
 	#[clap(default_value_t=4,short='P', long)]
@@ -28,6 +28,20 @@ struct Args {
 	///Size of a buffer to print
 	#[clap(default_value_t=256,short, long)]
 	buffer: usize,
+
+    ///STRING pattern in hex to search for
+    #[clap(default_value="0xFF", short, long)]
+    string_pattern: String,
+
+}
+
+fn hexlify(p: String) -> String {
+    let buffer = p.as_bytes();
+    let mut hex_pattern: String = String::new();
+    for b in buffer {
+        hex_pattern = format!("{} {:02x}", hex_pattern, b);
+    }
+    hex_pattern
 }
 
 
@@ -44,7 +58,8 @@ fn scan_memory(fname: String, scan_from: u64, scan_to: u64, pattern: String, buf
         let positions = scan(Cursor::new(buffer), &pattern).unwrap();
         if positions.len() > 0 {
 	    println!("\nFound {} positions in a chunk", positions.len());
-            for position in positions {
+            for p in positions {
+                println!("Offset: {} \n", p+position as usize);
 	            println!("{:?}\n\t", buffer[(position as usize)..(position as usize+buffer_to_print)].hex_dump());
             }
 	}
@@ -56,11 +71,15 @@ fn scan_memory(fname: String, scan_from: u64, scan_to: u64, pattern: String, buf
 
 fn main() {
     let args = Args::parse();
-    let pattern = args.pattern;
+    let mut pattern = args.hex_pattern;
 
     let scan_from: u64 = 0;
     let file_size = fs::metadata(&args.file_name).unwrap().len();
     let scan_to: u64 = file_size;
+
+    if args.string_pattern != "0xFF" {
+        pattern = hexlify(args.string_pattern);
+    }
 
     let chunk = file_size / args.parallel;
     let mut scan_from_chunk = scan_from;
