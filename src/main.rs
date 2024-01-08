@@ -60,7 +60,7 @@ fn scan_memory(fname: String, scan_from: u64, scan_to: u64, pattern: String, buf
 	    println!("\nFound {} positions in a chunk", positions.len());
             for p in positions {
                 println!("Offset: {} \n", p+position as usize);
-	            println!("{:?}\n\t", buffer[(position as usize)..(position as usize+buffer_to_print)].hex_dump());
+	            println!("{:?}\n\t", buffer[(p as usize)..(p as usize+buffer_to_print)].hex_dump());
             }
 	}
 	position += 1_048_576;
