@@ -17,9 +17,9 @@ struct Args {
      #[clap(short, long)]
      file_name: String,
 
-	///Pattern in hex to search for
-	#[clap(short, long)]
-     hex_pattern: String,
+	////HEX pattern to search for
+    #[clap(default_value="FF", short, long)]
+    hex_pattern: String,
 
 	///Parallel degree
 	#[clap(default_value_t=4,short='P', long)]
